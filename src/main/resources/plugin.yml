@@ -1,0 +1,10 @@
+main: me.kxmpxtxnt.internship.InternEconomy
+version: 1.0
+name: PayPaul
+description: Just a Paypal fake in Minecraft :D
+authors:
+  - Lillys
+  - next
+  - intern
+api-version: 1.18
+database: true
