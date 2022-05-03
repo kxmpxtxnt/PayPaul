@@ -1,4 +1,4 @@
-main: me.kxmpxtxnt.internship.InternEconomy
+main: me.kxmpxtxnt.paypaul.PayPaul
 version: 1.0
 name: PayPaul
 description: Just a Paypal fake in Minecraft :D
@@ -7,4 +7,6 @@ authors:
   - next
   - intern
 api-version: 1.18
-database: true
+commands:
+  paypaul:
+    description: Paypaul-Command | Main command of the plugin

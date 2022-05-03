@@ -7,6 +7,7 @@ plugins {
 dependencies {
     implementation("de.chojo:sql-util:1.2.3")
     implementation("de.eldoria:messageblocker:1.1.1")
+    implementation("de.eldoria:eldo-util:1.13.5")
     compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
     spigot("net.kyori:adventure-api:4.10.1")
     spigot("net.kyori:adventure-text-minimessage:4.10.1")

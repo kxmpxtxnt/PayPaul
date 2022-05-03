@@ -1,7 +1,7 @@
-package me.kxmpxtxnt.internship.data;
+package me.kxmpxtxnt.paypaul.data;
 
 import de.chojo.sqlutil.base.DataHolder;
-import me.kxmpxtxnt.internship.async.BukkitAsyncAction;
+import me.kxmpxtxnt.paypaul.async.BukkitAsyncAction;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 

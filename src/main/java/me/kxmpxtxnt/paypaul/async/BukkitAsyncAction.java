@@ -1,4 +1,4 @@
-package me.kxmpxtxnt.internship.async;
+package me.kxmpxtxnt.paypaul.async;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
