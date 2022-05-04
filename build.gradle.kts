@@ -12,6 +12,8 @@ dependencies {
     spigot("net.kyori:adventure-api:4.10.1")
     spigot("net.kyori:adventure-text-minimessage:4.10.1")
     spigot("com.zaxxer:HikariCP:5.0.1")
+    spigot("org.mariadb.jdbc:mariadb-java-client:3.0.4")
+    spigot("mysql:mysql-connector-java:8.0.29")
 }
 
 repositories {
@@ -22,7 +24,7 @@ repositories {
 }
 
 group = "me.kxmpxtxnt"
-version = "1.0-SNAPSHOT"
+version = "1.0"
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))

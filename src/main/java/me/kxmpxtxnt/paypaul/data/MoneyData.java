@@ -2,6 +2,7 @@ package me.kxmpxtxnt.paypaul.data;
 
 import de.chojo.sqlutil.base.DataHolder;
 import me.kxmpxtxnt.paypaul.async.BukkitAsyncAction;
+import me.kxmpxtxnt.paypaul.transaction.Transaction;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -12,10 +13,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class MoneyData extends DataHolder {
 
   private final Plugin plugin;
+  private final TransactionLogData transactionLog;
 
-  public MoneyData(DataSource dataSource, Plugin plugin) {
+  public MoneyData(DataSource dataSource, Plugin plugin, TransactionLogData transactionLog) {
     super(dataSource);
     this.plugin = plugin;
+    this.transactionLog = transactionLog;
   }
 
   public BukkitAsyncAction<Boolean> addMoney(Player player, long amount){
@@ -65,16 +68,18 @@ public class MoneyData extends DataHolder {
     });
   }
 
-  public BukkitAsyncAction<Boolean> transferMoney(Player sender, Player receiver, long amount){
+  public BukkitAsyncAction<Boolean> transferMoney(Transaction transaction){
     return BukkitAsyncAction.supplyAsync(plugin, () -> {
       var success = new AtomicBoolean(false);
-      removeMoney(sender, amount).queue(success::set);
+      transactionLog.addLog(transaction);
+
+      removeMoney(transaction.sender(), transaction.amount()).queue(success::set);
 
       if(!success.get()){
         return false;
       }
 
-      addMoney(sender, amount).queue(success::set);
+      addMoney(transaction.receiver(), transaction.amount()).queue(success::set);
       return success.get();
     });
   }
