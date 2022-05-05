@@ -6,6 +6,7 @@ import de.eldoria.messageblocker.MessageBlockerAPI;
 import de.eldoria.messageblocker.blocker.MessageBlocker;
 import me.kxmpxtxnt.paypaul.command.PayPaulCommand;
 import me.kxmpxtxnt.paypaul.data.MoneyData;
+import me.kxmpxtxnt.paypaul.data.TransactionLogData;
 import me.kxmpxtxnt.paypaul.data.util.DatabaseSetup;
 import me.kxmpxtxnt.paypaul.data.util.DatasourceProvider;
 
@@ -15,6 +16,7 @@ public final class PayPaul extends EldoPlugin {
   private HikariDataSource dataSource;
 
   private MoneyData moneyData;
+  private TransactionLogData logData;
 
   @Override
   public void onPluginEnable() throws Throwable {
@@ -37,6 +39,7 @@ public final class PayPaul extends EldoPlugin {
     }
 
     moneyData = new MoneyData(dataSource, this);
+    logData = new TransactionLogData(dataSource, this);
 
     messageBlocker = MessageBlockerAPI.create(this);
 
@@ -60,5 +63,9 @@ public final class PayPaul extends EldoPlugin {
 
   public MoneyData getMoneyData() {
     return moneyData;
+  }
+
+  public TransactionLogData getLogData() {
+    return logData;
   }
 }

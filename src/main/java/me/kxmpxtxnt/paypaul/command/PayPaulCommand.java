@@ -2,16 +2,13 @@ package me.kxmpxtxnt.paypaul.command;
 
 import de.eldoria.eldoutilities.commands.command.AdvancedCommand;
 import de.eldoria.eldoutilities.commands.command.CommandMeta;
-import me.kxmpxtxnt.paypaul.command.paypaul.Balance;
-import me.kxmpxtxnt.paypaul.command.paypaul.Create;
-import me.kxmpxtxnt.paypaul.command.paypaul.Overview;
-import me.kxmpxtxnt.paypaul.command.paypaul.Send;
-import org.bukkit.plugin.Plugin;
+import me.kxmpxtxnt.paypaul.PayPaul;
+import me.kxmpxtxnt.paypaul.command.paypaul.*;
 
 public class PayPaulCommand extends AdvancedCommand{
 
 
-  public PayPaulCommand(Plugin plugin) {
+  public PayPaulCommand(PayPaul plugin) {
     super(plugin, CommandMeta.builder("paypaul")
         .allowPlayer()
         .allowConsole()
@@ -21,6 +18,7 @@ public class PayPaulCommand extends AdvancedCommand{
           commands.add(overview);
           commands.add(new Send(plugin));
           commands.add(new Balance(plugin));
+          commands.add(new Log(plugin));
           //commands.add(new Create(plugin));
 
           self.withDefaultCommand(overview);
