@@ -4,6 +4,8 @@ import de.eldoria.eldoutilities.commands.command.AdvancedCommand;
 import de.eldoria.eldoutilities.commands.command.CommandMeta;
 import de.eldoria.eldoutilities.commands.command.util.Arguments;
 import de.eldoria.eldoutilities.commands.exceptions.CommandException;
+import me.kxmpxtxnt.paypaul.command.paypaul.create.CreateRequest;
+import me.kxmpxtxnt.paypaul.command.paypaul.create.CreateSend;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,7 +17,12 @@ import java.util.List;
 
 public class Create extends AdvancedCommand {
   public Create(Plugin plugin) {
-    super(plugin, CommandMeta.builder("create").build());
+    super(plugin, CommandMeta.builder("create")
+        .buildSubCommands((commands, self) -> {
+          commands.add(new CreateSend(plugin));
+          commands.add(new CreateRequest(plugin));
+        })
+        .build());
   }
 
   @Override

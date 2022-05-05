@@ -29,14 +29,12 @@ public class Balance extends AdvancedCommand {
 
     var component = MiniMessage.miniMessage().deserialize(
         Constants.header("Balance") +
-            """
-            \s
-            \s
-            <red>Your balance: <white><bold>""" + balance.get() + """
-            \s
-            <reset><gray><hover:show_text:'<#8B8A8A>Click to go back to the overview.'>[<click:run_command:/paypaul>[Back]<reset>
-            """
-            + Constants.header("Balance"));
+            "<br>" +
+            "<red>Your balance: <white>bold>" + balance.get() + "<reset>" +
+            "<br>" +
+            "<hover:show_text:'<#8B8A8A>Click to go back to the overview.'>[<click:run_command:/paypaul><gray>[Back]<reset>" +
+            "<br>" +
+            Constants.header("Overview"));
 
     player.sendMessage(component);
   }
