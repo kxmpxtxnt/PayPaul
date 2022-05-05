@@ -8,6 +8,7 @@ import org.bukkit.plugin.Plugin;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MoneyData extends DataHolder {
@@ -21,12 +22,12 @@ public class MoneyData extends DataHolder {
     this.transactionLog = new TransactionLogData(dataSource, plugin);
   }
 
-  public BukkitAsyncAction<Boolean> addMoney(Player player, long amount){
+  public BukkitAsyncAction<Boolean> addMoney(UUID player, long amount){
     return BukkitAsyncAction.supplyAsync(plugin, () -> {
       try(var connection = getConnection(); var statement = connection.prepareStatement(
           "insert into paypaul.money set uuid=?, money=? on duplicate key update money = money+?"
       )){
-        statement.setString(1, player.getUniqueId().toString());
+        statement.setString(1, player.toString());
         statement.setLong(2, amount);
         statement.setLong(3, amount);
         return statement.executeUpdate() == 1;
@@ -52,12 +53,12 @@ public class MoneyData extends DataHolder {
     });
   }
 
-  public BukkitAsyncAction<Long> getMoney(Player player){
+  public BukkitAsyncAction<Long> getMoney(UUID player){
     return BukkitAsyncAction.supplyAsync(plugin, () -> {
       try(var connection = getConnection(); var statement = connection.prepareStatement(
           "select money from paypaul.money where uuid=? limit 1"
       )){
-        statement.setString(1, player.getUniqueId().toString());
+        statement.setString(1, player.toString());
         var result = statement.executeQuery();
         if(result.next()){
           return result.getLong("money");
@@ -87,7 +88,7 @@ public class MoneyData extends DataHolder {
     });
   }
 
-  public BukkitAsyncAction<Boolean> removeMoney(Player player, Long amount){
+  public BukkitAsyncAction<Boolean> removeMoney(UUID player, Long amount){
     return BukkitAsyncAction.supplyAsync(plugin, () -> {
       var enough = new AtomicBoolean(false);
 
@@ -103,7 +104,7 @@ public class MoneyData extends DataHolder {
           "update paypaul.money set money=money-? where uuid=?"
       )) {
         statement.setLong(1, amount);
-        statement.setString(2, player.getUniqueId().toString());
+        statement.setString(2, player.toString());
         return statement.executeUpdate() == 1;
       }catch (SQLException e){
         logDbError(e);

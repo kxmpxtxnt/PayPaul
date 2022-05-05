@@ -25,8 +25,8 @@ public class TransactionLogData extends DataHolder {
           "insert into paypaul.log(time, sender, receiver, amount) VALUES(?,?,?,?)"
       )) {
         statement.setLong(1, transaction.time());
-        statement.setString(2, transaction.sender().getUniqueId().toString());
-        statement.setString(3, transaction.receiver().getUniqueId().toString());
+        statement.setString(2, transaction.sender().toString());
+        statement.setString(3, transaction.receiver().toString());
         statement.setLong(4, transaction.amount());
 
         statement.execute();
@@ -49,11 +49,11 @@ public class TransactionLogData extends DataHolder {
 
         while (result.next()){
           var time = result.getLong("time");
-          var sender = Bukkit.getOfflinePlayer(UUID.fromString(result.getString("sender")));
-          var receiver = Bukkit.getOfflinePlayer(UUID.fromString(result.getString("receiver")));
+          var sender = UUID.fromString(result.getString("sender"));
+          var receiver = UUID.fromString(result.getString("receiver"));
           var amount = result.getLong("amount");
 
-          transactions.add(new Transaction(sender.getPlayer(), receiver.getPlayer(), amount, time));
+          transactions.add(new Transaction(sender, receiver, amount, time));
         }
       } catch (SQLException e) {
         throw new RuntimeException(e);

@@ -40,8 +40,8 @@ public class Log extends AdvancedCommand {
         var sender = transaction.sender();
         var receiver= transaction.receiver();
 
-        sender.sendMessage(MiniMessage.miniMessage().deserialize("<blue>[" + transaction.time() + "]: <gold>" +
-            sender.getName() + " (" + sender.getUniqueId() + ") <white><bold>-> <reset><gold>" + receiver.getName() + " (" + receiver.getUniqueId() + ") <white><bold>| <yellow><bold>" +
+        commandSender.sendMessage(MiniMessage.miniMessage().deserialize("<blue>[" + transaction.time() + "]: <gold>[" +
+            sender + "] <white><bold>-> <reset><gold>[" + receiver + "] <white><bold>| <yellow><bold>" +
             transaction.amount() + plugin.getCurrency()));
       });
     });

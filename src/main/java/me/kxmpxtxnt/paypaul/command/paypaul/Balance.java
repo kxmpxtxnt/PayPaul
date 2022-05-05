@@ -25,7 +25,7 @@ public class Balance extends AdvancedCommand {
   public void commandRoute(CommandSender sender, String label, Arguments args) throws CommandException {
     var player = (Player)sender;
     AtomicLong balance = new AtomicLong(0L);
-    plugin.getMoneyData().getMoney(player).queue(balance::set);
+    plugin.getMoneyData().getMoney(player.getUniqueId()).queue(balance::set);
 
     var component = MiniMessage.miniMessage().deserialize(
         Constants.header("Balance") +

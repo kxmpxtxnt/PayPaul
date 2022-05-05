@@ -40,7 +40,7 @@ public class Send extends AdvancedCommand {
     var receiver = args.asPlayer(0);
     var amount = args.asLong(1);
 
-    plugin.getMoneyData().transferMoney(new Transaction(player, receiver, amount)).queue(success -> {
+    plugin.getMoneyData().transferMoney(new Transaction(player.getUniqueId(), receiver.getUniqueId(), amount)).queue(success -> {
       if(!success){
         player.sendMessage(MiniMessage.miniMessage().deserialize("<red>Something went wrong :("));
         return;

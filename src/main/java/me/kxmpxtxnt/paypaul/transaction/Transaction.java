@@ -2,32 +2,34 @@ package me.kxmpxtxnt.paypaul.transaction;
 
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class Transaction {
 
-  private final Player sender;
-  private final Player receiver;
+  private final UUID sender;
+  private final UUID receiver;
   private final Long amount;
   private final Long time;
 
-  public Transaction(Player sender, Player receiver, Long amount, Long time) {
+  public Transaction(UUID sender, UUID receiver, Long amount, Long time) {
     this.sender = sender;
     this.receiver = receiver;
     this.amount = amount;
     this.time = time;
   }
 
-  public Transaction(Player sender, Player receiver, Long amount) {
+  public Transaction(UUID sender, UUID receiver, Long amount) {
     this.sender = sender;
     this.receiver = receiver;
     this.amount = amount;
     this.time = System.currentTimeMillis();
   }
 
-  public Player sender(){
+  public UUID sender(){
     return sender;
   }
 
-  public Player receiver(){
+  public UUID receiver(){
     return receiver;
   }
 

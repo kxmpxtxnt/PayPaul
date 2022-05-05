@@ -9,6 +9,7 @@ import me.kxmpxtxnt.paypaul.data.MoneyData;
 import me.kxmpxtxnt.paypaul.data.TransactionLogData;
 import me.kxmpxtxnt.paypaul.data.util.DatabaseSetup;
 import me.kxmpxtxnt.paypaul.data.util.DatasourceProvider;
+import me.kxmpxtxnt.paypaul.listener.PlayerSendTransactionArgs;
 
 public final class PayPaul extends EldoPlugin {
 
@@ -44,6 +45,7 @@ public final class PayPaul extends EldoPlugin {
     messageBlocker = MessageBlockerAPI.create(this);
 
     registerCommand(new PayPaulCommand(this));
+    registerListener(new PlayerSendTransactionArgs());
   }
 
   @Override
