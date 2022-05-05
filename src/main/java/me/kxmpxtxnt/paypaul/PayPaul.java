@@ -5,14 +5,16 @@ import de.eldoria.eldoutilities.plugin.EldoPlugin;
 import de.eldoria.messageblocker.MessageBlockerAPI;
 import de.eldoria.messageblocker.blocker.MessageBlocker;
 import me.kxmpxtxnt.paypaul.command.PayPaulCommand;
+import me.kxmpxtxnt.paypaul.data.MoneyData;
 import me.kxmpxtxnt.paypaul.data.util.DatabaseSetup;
 import me.kxmpxtxnt.paypaul.data.util.DatasourceProvider;
-import org.jetbrains.annotations.Nullable;
 
 public final class PayPaul extends EldoPlugin {
 
   private MessageBlocker messageBlocker = null;
   private HikariDataSource dataSource;
+
+  private MoneyData moneyData;
 
   @Override
   public void onPluginEnable() throws Throwable {
@@ -34,6 +36,8 @@ public final class PayPaul extends EldoPlugin {
       return;
     }
 
+    moneyData = new MoneyData(dataSource, this);
+
     messageBlocker = MessageBlockerAPI.create(this);
 
     registerCommand(new PayPaulCommand(this));
@@ -41,7 +45,7 @@ public final class PayPaul extends EldoPlugin {
 
   @Override
   public void onPluginDisable() throws Throwable {
-    if(!dataSource.isClosed() && dataSource != null){
+    if(dataSource != null && !dataSource.isClosed()) {
       dataSource.close();
     }
   }
@@ -50,8 +54,11 @@ public final class PayPaul extends EldoPlugin {
     return getConfig().getString("currency");
   }
 
-  @Nullable
   public MessageBlocker getBlocker(){
     return this.messageBlocker;
+  }
+
+  public MoneyData getMoneyData() {
+    return moneyData;
   }
 }

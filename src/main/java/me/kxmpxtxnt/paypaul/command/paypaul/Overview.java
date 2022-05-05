@@ -23,11 +23,11 @@ public class Overview extends AdvancedCommand {
             """
             \s
             \s
-            <gold><hover:show_text:'<#8B8A8A>Click to view your account balance.'>[Balance] <reset><#8B8A8A>» Your Account balance
+            <gold><hover:show_text:'<#8B8A8A>Click to view your account balance.'><click:run_command:/paypaul balance>[Balance] <reset><#8B8A8A>» Your Account balance
             \s
-            <green><hover:show_text:'<#8B8A8A>Click to Send money to another player.'>[Send] <reset><#8B8A8A>» Send money
+            <green><hover:show_text:'<#8B8A8A>Click to Send money to another player.'><click:run_command:/paypaul create send>[Send] <reset><#8B8A8A>» Send money
             \s
-            <yellow><hover:show_text:'<#8B8A8A>Click to request money from a player.'>[Request] <reset><#8B8A8A>» Request money
+            <yellow><hover:show_text:'<#8B8A8A>Click to request money from a player.'>[<click:run_command:/paypaul create request>[Request] <reset><#8B8A8A>» Request money
             \s
             """
             + Constants.header("Overview")

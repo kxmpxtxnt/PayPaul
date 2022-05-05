@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-    implementation("de.chojo:sql-util:1.2.3")
+    implementation("de.chojo:sql-util:1.3.0")
     implementation("de.eldoria:messageblocker:1.1.1")
     implementation("de.eldoria:eldo-util:1.13.5")
     compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
@@ -13,13 +13,11 @@ dependencies {
     spigot("net.kyori:adventure-text-minimessage:4.10.1")
     spigot("com.zaxxer:HikariCP:5.0.1")
     spigot("org.mariadb.jdbc:mariadb-java-client:3.0.4")
-    spigot("mysql:mysql-connector-java:8.0.29")
 }
 
 repositories {
     mavenCentral()
     maven("https://eldonexus.de/repository/maven-public")
-    maven("https://chojonexus.de/repository/maven-public")
     maven("https://papermc.io/repo/repository/maven-public/")
 }
 
@@ -28,4 +26,13 @@ version = "1.0"
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+}
+
+tasks{
+    shadowJar{
+        mergeServiceFiles()
+    }
+    build {
+        dependsOn(shadowJar)
+    }
 }

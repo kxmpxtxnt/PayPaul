@@ -3,10 +3,12 @@ package me.kxmpxtxnt.paypaul.data;
 import de.chojo.sqlutil.base.DataHolder;
 import me.kxmpxtxnt.paypaul.async.BukkitAsyncAction;
 import me.kxmpxtxnt.paypaul.transaction.Transaction;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.*;
 
 public class TransactionLogData extends DataHolder {
 
@@ -30,8 +32,33 @@ public class TransactionLogData extends DataHolder {
         statement.execute();
         return true;
       } catch (SQLException e) {
+        logDbError(e);
+        return false;
+      }
+    });
+  }
+
+  public BukkitAsyncAction<HashSet<Transaction>> getTransactions(int count){
+    return BukkitAsyncAction.supplyAsync(plugin, () -> {
+      var transactions = new HashSet<Transaction>(Collections.emptySet());
+      try(var connection = getConnection(); var statement = connection.prepareStatement(
+          "select time, sender, receiver, amount from paypaul.log limit ?"
+      )) {
+        statement.setInt(1, count);
+        var result = statement.executeQuery();
+
+        while (result.next()){
+          var time = result.getLong("time");
+          var sender = Bukkit.getOfflinePlayer(UUID.fromString(result.getString("sender")));
+          var receiver = Bukkit.getOfflinePlayer(UUID.fromString(result.getString("receiver")));
+          var amount = result.getLong("amount");
+
+          transactions.add(new Transaction(sender.getPlayer(), receiver.getPlayer(), amount, time));
+        }
+      } catch (SQLException e) {
         throw new RuntimeException(e);
       }
+      return transactions;
     });
   }
 }

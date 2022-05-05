@@ -15,16 +15,16 @@ public class MoneyData extends DataHolder {
   private final Plugin plugin;
   private final TransactionLogData transactionLog;
 
-  public MoneyData(DataSource dataSource, Plugin plugin, TransactionLogData transactionLog) {
+  public MoneyData(DataSource dataSource, Plugin plugin) {
     super(dataSource);
     this.plugin = plugin;
-    this.transactionLog = transactionLog;
+    this.transactionLog = new TransactionLogData(dataSource, plugin);
   }
 
   public BukkitAsyncAction<Boolean> addMoney(Player player, long amount){
     return BukkitAsyncAction.supplyAsync(plugin, () -> {
       try(var connection = getConnection(); var statement = connection.prepareStatement(
-          "insert into paypaul.economy set uuid=?, money=? on duplicate key update money = money+?"
+          "insert into paypaul.money set uuid=?, money=? on duplicate key update money = money+?"
       )){
         statement.setString(1, player.getUniqueId().toString());
         statement.setLong(2, amount);
@@ -32,39 +32,42 @@ public class MoneyData extends DataHolder {
         return statement.executeUpdate() == 1;
       }catch (SQLException e){
         logDbError(e);
+        return false;
       }
-
-      return false;
     });
   }
 
   public BukkitAsyncAction<Boolean> setMoney(Player player, long amount){
     return BukkitAsyncAction.supplyAsync(plugin, () -> {
       try (var connection = getConnection(); var statement = connection.prepareStatement(
-          "REPLACE paypaul.economy(uuid, money) VALUES(?,?)"
+          "REPLACE paypaul.money(uuid, money) VALUES(?,?)"
       )) {
         statement.setString(1, player.getUniqueId().toString());
         statement.setLong(2, amount);
         return statement.executeUpdate() == 1;
       } catch (SQLException e) {
-        logDbError("Could not set Money", e);
+        logDbError(e);
+        return false;
       }
-
-      return false;
     });
   }
 
   public BukkitAsyncAction<Long> getMoney(Player player){
     return BukkitAsyncAction.supplyAsync(plugin, () -> {
       try(var connection = getConnection(); var statement = connection.prepareStatement(
-          "select money from paypaul.economy where uuid=? limit 1"
+          "select money from paypaul.money where uuid=? limit 1"
       )){
         statement.setString(1, player.getUniqueId().toString());
-        return statement.executeQuery().getLong(1);
+        var result = statement.executeQuery();
+        if(result.next()){
+          return result.getLong("money");
+        }
+
+        return 0L;
       }catch (SQLException e){
-       logDbError(e);
+        logDbError(e);
+        return 0L;
       }
-      return 0L;
     });
   }
 
@@ -97,15 +100,15 @@ public class MoneyData extends DataHolder {
       }
 
       try(var connection = getConnection(); var statement = connection.prepareStatement(
-          "update paypaul.economy set money=money-? where uuid=?"
+          "update paypaul.money set money=money-? where uuid=?"
       )) {
         statement.setLong(1, amount);
         statement.setString(2, player.getUniqueId().toString());
         return statement.executeUpdate() == 1;
       }catch (SQLException e){
         logDbError(e);
+        return false;
       }
-      return false;
     });
   }
   

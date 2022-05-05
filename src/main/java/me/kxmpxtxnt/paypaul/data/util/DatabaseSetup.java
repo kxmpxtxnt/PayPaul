@@ -9,27 +9,27 @@ import java.util.logging.Level;
 
 public class DatabaseSetup {
 
-  public static boolean setupDatabase(Plugin plugin, DataSource dataSource){
-    String sql;
-    try (var in = DatabaseSetup.class.getClassLoader().getResourceAsStream("dbsetup.sql")) {
-      sql = new String(in != null ? in.readAllBytes() : new byte[0]);
+  //joinked from Lilly :3
+  public static void setupDatabase(Plugin plugin, DataSource dataSource) throws SQLException, IOException {
+    String setup;
+    int amount = 0;
+    try (var in = DatabaseSetup.class.getClassLoader().getResourceAsStream("setup.sql")) {
+      setup = new String(in != null ? in.readAllBytes() : new byte[0]);
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      plugin.getLogger().log(Level.SEVERE, "Could not read db setup file.", e);
+      throw e;
     }
-
-    try(var connection = dataSource.getConnection()) {
-      connection.setAutoCommit(false);
-
-      for(String statement : sql.split(";")){
-        if(statement.isBlank() || statement.isEmpty())continue;
-        try(var prepareStatement = connection.prepareStatement(statement)) {
-          prepareStatement.execute();
+    try (var conn = dataSource.getConnection()) {
+      conn.setAutoCommit(false);
+      for (String query : setup.split(";")) {
+        if (query.isBlank()) continue;
+        try (var stmt = conn.prepareStatement(query)) {
+          amount++;
+          stmt.execute();
         }
       }
-      connection.commit();
-      return true;
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
+      conn.commit();
     }
+    plugin.getLogger().info("§2Database setup complete. Executed " + amount + " queries.");
   }
 }
